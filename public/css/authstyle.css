@@ -1,0 +1,115 @@
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -ms-flex-align: center;
+  -ms-flex-pack: center;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+/*  background-image: url(/img/background.jpg);*/
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 300px;
+  padding: 15px;
+  margin: 0 auto;
+  background-color: #f5f5f5;
+  border-radius:20px;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  font-size: 12px;
+  margin-bottom: 3px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+
+.registertext{
+  font-size: 70%;
+}
+.checkbox.registertext{
+  margin-top: 3px;
+  font-size: 70%;
+}
+
+/* Infinite rotating class */
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.rotating {
+  -webkit-animation: rotating 8s linear infinite;
+  -moz-animation: rotating 8s linear infinite;
+  -ms-animation: rotating 8s linear infinite;
+  -o-animation: rotating 8s linear infinite;
+  animation: rotating 8s linear infinite;
+}
+
+.alert-error {
+  padding: 0.3rem 0.5rem;
+  margin-bottom: 0.3rem;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  position: relative;
+}
+
+.alert-error, .alert-danger {
+  padding: 0.3rem 0.5rem;
+  margin-bottom: 0.3rem;
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  position: relative;
+}

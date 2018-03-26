@@ -1,0 +1,18 @@
+extends authLayout
+
+block content
+  form.form-signin(method='POST', action='/users/login')
+    img.mb-4.rotating(id='logo', src='/img/logo.png', alt='', width='200', height='200')
+    != messages('message', locals)
+    if errors
+      each error, i in errors
+        div(class="alert alert-danger") #{error.msg}
+    label.sr-only(for='inputEmail') Email address
+    input#email.form-control(name='email', type='text', placeholder='Email address', required='', autofocus='')
+    label.sr-only(for='inputPassword') Password
+    input#password.form-control(name='password', type='password', placeholder='Password', required='')
+    .checkbox.mb-3.logintext
+        input#remember(name='remember', type='checkbox', value='remember')
+        |  Remember me
+    button.btn.btn-lg.btn-danger.btn-block(type='submit', value='Submit') Login
+    a.nav-link.logintext(href='/users/register') Create an account.
