@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 //! DECLARING
 // packages
 const readline = require('readline');
@@ -20,6 +22,9 @@ const redirectApp = express();
 const environment = process.env.NODE_ENV;
 const localDB = process.env.VORTER_LOCAL_DB;
 const remoteDB = process.env.VORTER_REMOTE_DB;
+if ((!environment)||(!localDB)||(!remoteDB)){
+  console.log("Environment variables is underfined!");
+}
 let secure = false;
 let options;
 if (environment=="development") secure = false;
@@ -32,6 +37,10 @@ let portSSL = 443;
 
 // selected database
 let selectedDB = localDB;
+if (!selectedDB){
+  console.log("Database Error!");
+  process.exit(0);
+}
 let db = mongoose.connection;
 let connectedToDB;
 
