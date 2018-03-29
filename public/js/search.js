@@ -23,6 +23,22 @@ let main = function() {
     showSearchParam();
   });
 
+  $("#dota2").click(function() {
+    $("#game").val("Dota2");
+  });
+  $("#csgo").click(function() {
+    $("#game").val("CS GO");
+  });
+  $("#pubg").click(function() {
+    $("#game").val("PUBG");
+  });
+  $("#fortnite").click(function() {
+    $("#game").val("Fortnite");
+  });
+  $("#lol").click(function() {
+    $("#game").val("League of legends");
+  });
+
   $('.container').click(function(e) {
     let container1 = $('.gameLink');
     let container2 = $('.searchParam');
