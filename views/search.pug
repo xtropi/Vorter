@@ -1,5 +1,22 @@
 extends layout
 
 block content
-  | panel moved from the left side with search parameters
-  | and games list in center-right side
+  .searchParam
+    input#purpose.form-control(name='purpose', type='text', placeholder='purpose', autofocus='')
+    input#time.form-control(name='time', type='text', placeholder='time', autofocus='')
+    input#country.form-control(name='country', type='country', placeholder='country')
+    input#groupSize.form-control(name='groupSize', type='groupSize', placeholder='Group size')
+    a#searchStart.btn.btn-lg.btn-danger.btn-block.disabled(type='submit', value='SearchStart') Search
+    a#searchStop.btn.btn-lg.btn-danger.btn-block.d-none(type='submit', value='SearchCancel') Cancel
+  .background.text-center
+    br
+    a.gameLink(href='#')
+      img.block(src='/img/dota2.jpg', width='300', height='150', alt='Dota2')
+    a.gameLink(href='#')
+      img.block(src='/img/cs_go.jpg', width='300', height='150', alt='CS GO')
+    a.gameLink(href='#')
+      img.block(src='/img/league_of_legends.jpg', width='300', height='150', alt='LOL')
+    a.gameLink(href='#')
+      img.block(src='/img/pubg.jpg', width='300', height='150', alt='PUBG')
+    a.gameLink(href='#')
+      img.block(src='/img/fortnite.jpg', width='300', height='150', alt='Fortnite')

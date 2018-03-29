@@ -1,3 +1,7 @@
+.bg-light {
+    background-color: #eee !important;
+}
+
 .alert-error{
   color: #a94442;
   background-color: #f2dede;
@@ -51,4 +55,13 @@
   -ms-animation: rotating 8s linear infinite;
   -o-animation: rotating 8s linear infinite;
   animation: rotating 8s linear infinite;
+}
+
+/* Body*/
+
+body {
+  left: 0;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
 }
