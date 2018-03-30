@@ -1,7 +1,21 @@
 extends layout
 
 block content
-  | Profile page
+  input#nickname.form-control(name='nickname', type='text', placeholder='Nickname', autofocus='')
+  input#country.form-control(name='country', type='country', placeholder='Country')
+  input#purpose.form-control(name='purpose', type='text', placeholder='Purpose', autofocus='')
+  input#time.form-control(name='time', type='text', placeholder='Time', autofocus='')
+  input#overallSkill.form-control(name='overallSkill', type='text', placeholder='Overall skill', autofocus='')
+  input#groupSize.form-control(name='groupSize', type='groupSize', placeholder='Group size')
+  br
+  .contacts
+    |Contacts
+    input#discord.form-control(name='discord', type='text', placeholder='Discord', autofocus='')
+    input#steam.form-control(name='steam', type='text', placeholder='Steam', autofocus='')
+  br
+  button#searchStart.btn.btn-lg.btn-danger.btn-block(type='submit', value='ProfileSave') Save
+  br
+  button#searchStop.btn.btn-lg.btn-danger.btn-block(type='submit', value='ProfileCancel') Cancel
   br
   hr
   footer

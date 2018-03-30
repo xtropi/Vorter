@@ -18,5 +18,9 @@ block content
     button.btn.btn-lg.btn-danger.btn-block(type='submit', value='Submit') Register
     .checkbox#agreement.registertext
         input(name='agreement', type='checkbox', value='agreement')
-        |  I agree to the Terms of Service and the Privacy Policy.
+        |  I agree to the 
+        a(href='#') Terms of Service 
+        br
+        | and the 
+        a(href='#') Privacy Policy.
     a.nav-link.registertext(href='/users/login') I already have an account. Login.
