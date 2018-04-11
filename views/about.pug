@@ -1,8 +1,55 @@
-extends layout
+doctype html
+html
+  head
+    title Vorter
+    link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    link(rel='stylesheet' href='/css/style.css')
+    link(rel='stylesheet' href='/css/search.css')
+    link(rel='icon', href='/img/favicon.ico')
+    meta(name='description', content='Vorter is a service to group up and cooperate gamers')
+  body
+    nav.navbar.navbar-expand-sm.navbar-light.bg-light
+      div.logocontainer
+        a.mt-1.navbar-brand.logotype.h1(href='/') V
+          img.rotating(src='/img/favicon.ico')
+        a.navbar-brand.logotype.h1(href='/') RTER
+      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbar', aria-controls='navbar', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbar.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto.h6
+          if user
+            li.nav-item
+              strong
+                a.nav-link(href='/profile')
+                  u #{author}
+        ul.navbar-nav.navbar-right
+          li.nav-item.mr-3
+            |Local time:
+            .localTime
+          li.nav-item.mr-3
+            |Timezone:
+            .timeZone
+          li.nav-item
+            a.nav-link(href='/faq') FAQ
+          li.nav-item
+            a.nav-link(href='/about') About
+          if user
+            li.nav-item
+              a.nav-link.font-weight-bold(href='/users/logout') Logout
+          else
+            li.nav-item
+              a.nav-link(href='/users/register') Register
+            li.nav-item
+              a.nav-link(href='/users/login') Login
+    .container
+      | About
+      br
+      hr
+      footer
+        p.mt-2.mb-2.text-muted Copyright &copy; Vorter 2018
 
-block content
-  | About
-  br
-  hr
-  footer
-    p.mt-2.mb-2.text-muted Copyright &copy; Vorter 2018
+    script(src='/bower_components/jquery/dist/jquery.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/main.js')
+    script(src='/js/search.js')
+

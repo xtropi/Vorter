@@ -1,23 +1,70 @@
-extends layout
+doctype html
+html
+  head
+    title Vorter
+    link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    link(rel='stylesheet' href='/css/style.css')
+    link(rel='stylesheet' href='/css/search.css')
+    link(rel='icon', href='/img/favicon.ico')
+    meta(name='description', content='Vorter is a service to group up and cooperate gamers')
+  body
+    nav.navbar.navbar-expand-sm.navbar-light.bg-light
+      div.logocontainer
+        a.mt-1.navbar-brand.logotype.h1(href='/') V
+          img.rotating(src='/img/favicon.ico')
+        a.navbar-brand.logotype.h1(href='/') RTER
+      button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbar', aria-controls='navbar', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbar.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto.h6
+          if user
+            li.nav-item
+              strong
+                a.nav-link(href='/profile')
+                  u #{author}
+        ul.navbar-nav.navbar-right
+          li.nav-item.mr-3
+            |Local time:
+            .localTime
+          li.nav-item.mr-3
+            |Timezone:
+            .timeZone
+          li.nav-item
+            a.nav-link(href='/faq') FAQ
+          li.nav-item
+            a.nav-link(href='/about') About
+          if user
+            li.nav-item
+              a.nav-link.font-weight-bold(href='/users/logout') Logout
+          else
+            li.nav-item
+              a.nav-link(href='/users/register') Register
+            li.nav-item
+              a.nav-link(href='/users/login') Login
+    .container
+      .searchParam
+        input#game.form-control(name='game', type='text', placeholder='Game', autofocus='')
+        input#purpose.form-control(name='purpose', type='text', placeholder='Purpose', autofocus='')
+        input#time.form-control(name='time', type='text', placeholder='Time', autofocus='')
+        input#country.form-control(name='country', type='country', placeholder='Country')
+        input#groupSize.form-control(name='groupSize', type='groupSize', placeholder='Group size')
+        a#searchStart.btn.btn-lg.btn-danger.btn-block.disabled(type='submit', value='SearchStart') Search
+        a#searchStop.btn.btn-lg.btn-danger.btn-block.d-none(type='submit', value='SearchCancel') Cancel
+      .background.text-center
+        br
+        a.gameLink(href='#')
+          img#dota2.block(src='/img/dota2.jpg', alt='Dota2')
+        a.gameLink(href='#')
+          img#csgo.block(src='/img/cs_go.jpg', alt='CS GO')
+        a.gameLink(href='#')
+          img#lol.block(src='/img/league_of_legends.jpg', alt='LOL')
+        a.gameLink(href='#')
+          img#pubg.block(src='/img/pubg.jpg', alt='PUBG')
+        a.gameLink(href='#')
+          img#fortnite.block(src='/img/fortnite.jpg', alt='Fortnite')
 
-block content
-  .searchParam
-    input#game.form-control(name='game', type='text', placeholder='Game', autofocus='')
-    input#purpose.form-control(name='purpose', type='text', placeholder='Purpose', autofocus='')
-    input#time.form-control(name='time', type='text', placeholder='Time', autofocus='')
-    input#country.form-control(name='country', type='country', placeholder='Country')
-    input#groupSize.form-control(name='groupSize', type='groupSize', placeholder='Group size')
-    a#searchStart.btn.btn-lg.btn-danger.btn-block.disabled(type='submit', value='SearchStart') Search
-    a#searchStop.btn.btn-lg.btn-danger.btn-block.d-none(type='submit', value='SearchCancel') Cancel
-  .background.text-center
-    br
-    a.gameLink(href='#')
-      img#dota2.block(src='/img/dota2.jpg', alt='Dota2')
-    a.gameLink(href='#')
-      img#csgo.block(src='/img/cs_go.jpg', alt='CS GO')
-    a.gameLink(href='#')
-      img#lol.block(src='/img/league_of_legends.jpg', alt='LOL')
-    a.gameLink(href='#')
-      img#pubg.block(src='/img/pubg.jpg', alt='PUBG')
-    a.gameLink(href='#')
-      img#fortnite.block(src='/img/fortnite.jpg', alt='Fortnite')
+
+    script(src='/bower_components/jquery/dist/jquery.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+    script(src='/js/main.js')
+    script(src='/js/search.js')

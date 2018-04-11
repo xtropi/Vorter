@@ -1,26 +1,42 @@
-extends authLayout
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(name='description', content='Service to group up gamers')
+    meta(name='author', content='Mukhtar Musaev')
+    link(rel='icon', href='/img/favicon.ico')
+    title Vorter
+    // Bootstrap core CSS
+    link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    // Custom styles for this template
+    link(rel='stylesheet' href='/css/authstyle.css')
+  body.text-center
+    .container
+      form.form-signin(method='POST', action='/users/register')
+        img.mb-4.rotating(id='logo', src='/img/logo.png', alt='', width='200', height='200')
+        != messages('message', locals)
+        if errors
+          each error, i in errors
+            div(class="alert alert-danger") #{error.msg}
+        label.sr-only(for='inputEmail') Email address
+        input#email.form-control(name='email', type='text', placeholder='Email address', required='', autofocus='')
+        label.sr-only(for='inputUsername') Username
+        input#username.form-control(name='username', type='text', placeholder='Username', required='', autofocus='')
+        label.sr-only(for='inputPassword') Password
+        input#password.form-control(name='password', type='password', placeholder='Password', required='')
+        label.sr-only(for='inputPassword') Confirm
+        input#password2.form-control(name='password2', type='password', placeholder='Confirm Password', required='')
+        button.btn.btn-lg.btn-danger.btn-block(type='submit', value='Submit') Register
+        .checkbox#agreement.registertext
+            input(name='agreement', type='checkbox', value='agreement')
+            |  I agree to the 
+            a(href='#') Terms of Service 
+            br
+            | and the 
+            a(href='#') Privacy Policy.
+        a.nav-link.registertext(href='/users/login') I already have an account. Login.
+      footer
+        p.mt-2.mb-2.text-muted &copy; Vorter 2018
 
-block content
-  form.form-signin(method='POST', action='/users/register')
-    img.mb-4.rotating(id='logo', src='/img/logo.png', alt='', width='200', height='200')
-    != messages('message', locals)
-    if errors
-      each error, i in errors
-        div(class="alert alert-danger") #{error.msg}
-    label.sr-only(for='inputEmail') Email address
-    input#email.form-control(name='email', type='text', placeholder='Email address', required='', autofocus='')
-    label.sr-only(for='inputUsername') Username
-    input#username.form-control(name='username', type='text', placeholder='Username', required='', autofocus='')
-    label.sr-only(for='inputPassword') Password
-    input#password.form-control(name='password', type='password', placeholder='Password', required='')
-    label.sr-only(for='inputPassword') Confirm
-    input#password2.form-control(name='password2', type='password', placeholder='Confirm Password', required='')
-    button.btn.btn-lg.btn-danger.btn-block(type='submit', value='Submit') Register
-    .checkbox#agreement.registertext
-        input(name='agreement', type='checkbox', value='agreement')
-        |  I agree to the 
-        a(href='#') Terms of Service 
-        br
-        | and the 
-        a(href='#') Privacy Policy.
-    a.nav-link.registertext(href='/users/login') I already have an account. Login.
+
