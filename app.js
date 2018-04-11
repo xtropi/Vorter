@@ -187,7 +187,7 @@ app.get('/', function(req, res){
 app.get('/search', function(req, res){
   User.findById(req.user.id, function(err, user){
     res.render('search', {
-      author: user.username
+      nickname: user.nickname
     });
   });
 });
@@ -195,15 +195,35 @@ app.get('/search', function(req, res){
 app.get('/profile', function(req, res){
   User.findById(req.user.id, function(err, user){
     res.render('profile', {
-      author: user.username
+      user: user
     });
   });
+});
+
+app.post('/profile', function(req, res){
+  if (!req.user){
+    res.locals.user = null;
+    res.redirect('/users/login');
+  } else {
+    res.locals.user = req.user;
+    res.redirect('/search');
+  }
+});
+
+app.post('/cancel', function(req, res){
+  if (!req.user){
+    res.locals.user = null;
+    res.redirect('/users/login');
+  } else {
+    res.locals.user = req.user;
+    res.redirect('/search');
+  }
 });
 
 app.get('/faq', function(req, res){
   User.findById(req.user.id, function(err, user){
     res.render('faq', {
-      author: user.username
+      nickname: user.nickname
     });
   });
 });
@@ -211,7 +231,7 @@ app.get('/faq', function(req, res){
 app.get('/about', function(req, res){
   User.findById(req.user.id, function(err, user){
     res.render('about', {
-      author: user.username
+      nickname: user.nickname
     });
   });
 });

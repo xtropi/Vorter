@@ -1,0 +1,27 @@
+.form-control {
+    display: block;
+    width: 300px; 
+}
+.btn {
+    position: relative;
+    display: inline-block;
+    width: 120px; 
+    font-size: 14px;
+}
+
+.btn-block + .btn-block {
+    margin: 0 !important;
+}
+
+#profileCancel { 
+    background-color: #1458a7;
+    border-color: #1458a7;
+    position: relative;
+    left: 60px;
+} 
+
+.profileData {
+    position: relative;
+  /*  left: 25%;
+    margin-right: -25%;*/
+}

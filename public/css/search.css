@@ -1,11 +1,15 @@
 body {
-  position: fixed;
+  /*position: fixed;*/
   height: 100%;
   width: 100%;
 }
 
 .container {
   height: 100%;
+}
+
+.searchParam-wrap {
+  margin: 15px 15px 0px 15px;
 }
 
 .searchParam {

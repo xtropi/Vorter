@@ -56,16 +56,6 @@ let main = function() {
     $('#searchStart').removeClass('d-none');
   });
 
-  $(':input').keyup(function() {
-    if ((!$('#purpose').val()=="") &&
-    (!$('#time').val()=="") &&
-    (!$('#country').val()=="") &&
-    (!$('#groupSize').val()=="")){
-      $('#searchStart').removeClass('disabled');
-    } else {
-      $('#searchStart').addClass('disabled');
-    }
-  });
 };
 
 

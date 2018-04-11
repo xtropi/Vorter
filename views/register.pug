@@ -21,8 +21,8 @@ html(lang='en')
             div(class="alert alert-danger") #{error.msg}
         label.sr-only(for='inputEmail') Email address
         input#email.form-control(name='email', type='text', placeholder='Email address', required='', autofocus='')
-        label.sr-only(for='inputUsername') Username
-        input#username.form-control(name='username', type='text', placeholder='Username', required='', autofocus='')
+        label.sr-only(for='inputNickname') Nickname
+        input#nickname.form-control(name='nickname', type='text', placeholder='Nickname', required='', autofocus='')
         label.sr-only(for='inputPassword') Password
         input#password.form-control(name='password', type='password', placeholder='Password', required='')
         label.sr-only(for='inputPassword') Confirm
@@ -38,5 +38,6 @@ html(lang='en')
         a.nav-link.registertext(href='/users/login') I already have an account. Login.
       footer
         p.mt-2.mb-2.text-muted &copy; Vorter 2018
+  script(src='/js/main.js')
 
 

@@ -23,14 +23,14 @@ router.get('/register', function(req, res){
 router.post('/register', function(req, res){
   // Get inputed values
   const email = req.body.email.toLowerCase();
-  const username = req.body.username;
+  const nickname = req.body.nickname;
   const password = req.body.password;
   const password2 = req.body.password2;
 
   // Check values through ExpressValidator
   req.checkBody('email', 'Email is required').notEmpty();
   req.checkBody('email', 'Email is not valid').isEmail();
-  req.checkBody('username', 'Username is required').notEmpty();
+  req.checkBody('nickname', 'Nickname is required').notEmpty();
   req.checkBody('password', 'Password is required').notEmpty();
   req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
   req.checkBody('agreement', 'You did not sign the agreement').notEmpty();
@@ -41,24 +41,24 @@ router.post('/register', function(req, res){
       errors:validErrors
     });
   } else {
-    // Check email & username in database
-    checkOnExist(email, username, function(err, user, existEmail, existUsername) {
+    // Check email & nickname in database
+    checkOnExist(email, nickname, function(err, user, existEmail, existNickname) {
       if (err) {
         console.log(err);
       }
-      if (!existEmail && !existUsername){
+      if (!existEmail && !existNickname){
         createUser();
       } else {
         if (existEmail) {req.flash("danger", "Email is exist");}; // Email is already exist
-        if (existUsername) {req.flash("danger", "Username is exist");}; // Username is already exist
+        //if (existNickname) {req.flash("danger", "Nickname is exist");}; // nickname is already exist
         res.redirect('/users/register');
       }
     });
   };
 
-  function checkOnExist(email, username, callback) {
+  function checkOnExist(email, nickname, callback) {
     let existEmail = false;
-    let existUsername = false;
+    let existNickname = false;
     User.findOne({email: email}, function(err, user) {
       if (err) {
         callback(err, null, true, true);
@@ -66,14 +66,14 @@ router.post('/register', function(req, res){
           if (user){
             existEmail = true;
           }
-          User.findOne({username: username}, function(err, user) {
+          User.findOne({nickname: nickname}, function(err, user) {
             if (err) {
               callback(err, null, true, true);
             } else {
                 if (user){
-                  existUsername = true;
+                  existNickname = true;
                 }
-                callback(null, user, existEmail, existUsername);
+                callback(null, user, existEmail, existNickname);
               }
           });
         }
@@ -83,7 +83,7 @@ router.post('/register', function(req, res){
   function createUser(){
     let newUser = new User({
       email:email,
-      username:username,
+      nickname:nickname,
       password:password
     });
     bcrypt.genSalt(10, function(err, salt){

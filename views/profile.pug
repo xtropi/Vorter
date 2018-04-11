@@ -4,7 +4,7 @@ html
     title Vorter
     link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
     link(rel='stylesheet' href='/css/style.css')
-    link(rel='stylesheet' href='/css/search.css')
+    link(rel='stylesheet' href='/css/profile.css')
     link(rel='icon', href='/img/favicon.ico')
     meta(name='description', content='Vorter is a service to group up and cooperate gamers')
   body
@@ -21,7 +21,7 @@ html
             li.nav-item
               strong
                 a.nav-link(href='/profile')
-                  u #{author}
+                  u #{user.nickname}
         ul.navbar-nav.navbar-right
           li.nav-item.mr-3
             |Local time:
@@ -42,28 +42,47 @@ html
             li.nav-item
               a.nav-link(href='/users/login') Login
     .container
-      input#nickname.form-control(name='nickname', type='text', placeholder='Nickname', autofocus='')
-      input#country.form-control(name='country', type='country', placeholder='Country')
-      input#purpose.form-control(name='purpose', type='text', placeholder='Purpose', autofocus='')
-      input#time.form-control(name='time', type='text', placeholder='Time', autofocus='')
-      input#overallSkill.form-control(name='overallSkill', type='text', placeholder='Overall skill', autofocus='')
-      input#groupSize.form-control(name='groupSize', type='groupSize', placeholder='Group size')
-      br
-      .contacts
-        |Contacts
-        input#discord.form-control(name='discord', type='text', placeholder='Discord', autofocus='')
-        input#steam.form-control(name='steam', type='text', placeholder='Steam', autofocus='')
-      br
-      button#searchStart.btn.btn-lg.btn-danger.btn-block(type='submit', value='ProfileSave') Save
-      br
-      button#searchStop.btn.btn-lg.btn-danger.btn-block(type='submit', value='ProfileCancel') Cancel
+      form.profileInformation(method='POST', action='/profile')
+        img.avatar(src='/img/avatar.png')
+        .profileData
+          input#nickname.form-control(name='nickname', type='text', placeholder='Nickname', autofocus='')
+          input#country.form-control(name='country', type='country', placeholder='Country')
+          select#purpose.form-control
+            option Chill
+            option Just for fun
+            option Tryhard
+            option Preparing to pro
+            option Professional
+          #time-range
+            p
+              | Time Range: 
+              span.slider-time 10:00 AM
+              |  - 
+              span.slider-time2 12:00 PM
+            .sliders_step1
+              #slider-range
+          select#overallSkill.form-control
+            option Low
+            option Average
+            option Not so high
+            option Really so high
+            option Pro
+        br
+        .contacts
+          |Contacts
+          input#discord.form-control(name='discord', type='text', placeholder='Discord', autofocus='')
+          input#steam.form-control(name='steam', type='text', placeholder='Steam', autofocus='')
+        br
+        button#profileSave.i.btn.btn-lg.btn-danger.btn-block(type='submit', value='Save') Save
+      form(id='cancelForm', method='POST', action='/cancel')
+        button#profileCancel.i.btn.btn-lg.btn-primary.btn-block(form="cancelForm", type='submit', value='Cancel') Cancel
       br
       hr
       footer
         p.mt-2.mb-2.text-muted Copyright &copy; Vorter 2018
-
-        script(src='/bower_components/jquery/dist/jquery.js')
-        script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
-        script(src='/js/main.js')
-        script(src='/js/search.js')
+  script(src='/bower_components/jquery/dist/jquery.js')
+  script(src='/bower_components/jquery-ui/jquery-ui.js')
+  script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
+  script(src='/js/main.js')
+  script(src='/js/profile.js')
 

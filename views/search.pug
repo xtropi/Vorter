@@ -21,7 +21,7 @@ html
             li.nav-item
               strong
                 a.nav-link(href='/profile')
-                  u #{author}
+                  u #{nickname}
         ul.navbar-nav.navbar-right
           li.nav-item.mr-3
             |Local time:
@@ -43,13 +43,23 @@ html
               a.nav-link(href='/users/login') Login
     .container
       .searchParam
-        input#game.form-control(name='game', type='text', placeholder='Game', autofocus='')
-        input#purpose.form-control(name='purpose', type='text', placeholder='Purpose', autofocus='')
-        input#time.form-control(name='time', type='text', placeholder='Time', autofocus='')
-        input#country.form-control(name='country', type='country', placeholder='Country')
-        input#groupSize.form-control(name='groupSize', type='groupSize', placeholder='Group size')
-        a#searchStart.btn.btn-lg.btn-danger.btn-block.disabled(type='submit', value='SearchStart') Search
-        a#searchStop.btn.btn-lg.btn-danger.btn-block.d-none(type='submit', value='SearchCancel') Cancel
+        .searchParam-wrap
+          input#game.form-control(name='game', type='text', placeholder='Game', autofocus='')
+          #time-range
+            p
+              | Time Range: 
+              span.slider-time 10:00 AM
+              |  - 
+              span.slider-time2 12:00 PM
+            .sliders_step1
+              #slider-range
+          select#groupSize.form-control
+            option 2
+            option 3
+            option 4
+            option 5
+          a#searchStart.btn.btn-lg.btn-danger.btn-block(type='submit', value='SearchStart') Search
+          a#searchStop.btn.btn-lg.btn-primary.btn-block.d-none(type='submit', value='SearchCancel') Cancel
       .background.text-center
         br
         a.gameLink(href='#')
@@ -65,6 +75,7 @@ html
 
 
     script(src='/bower_components/jquery/dist/jquery.js')
+    script(src='/bower_components/jquery-ui/jquery-ui.js')
     script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
     script(src='/js/main.js')
     script(src='/js/search.js')
