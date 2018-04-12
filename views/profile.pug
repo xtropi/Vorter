@@ -42,44 +42,76 @@ html
             li.nav-item
               a.nav-link(href='/users/login') Login
     .container
-      form.profileInformation(method='POST', action='/profile')
-        img.avatar(src='/img/avatar.png')
-        .profileData
-          input#nickname.form-control(name='nickname', type='text', placeholder='Nickname', autofocus='')
-          input#country.form-control(name='country', type='country', placeholder='Country')
-          select#purpose.form-control
-            option Chill
-            option Just for fun
-            option Tryhard
-            option Preparing to pro
-            option Professional
-          #time-range
-            p
-              | Time Range: 
-              span.slider-time 10:00 AM
-              |  - 
-              span.slider-time2 12:00 PM
-            .sliders_step1
-              #slider-range
-          select#overallSkill.form-control
-            option Low
-            option Average
-            option Not so high
-            option Really so high
-            option Pro
-        br
-        .contacts
-          |Contacts
-          input#discord.form-control(name='discord', type='text', placeholder='Discord', autofocus='')
-          input#steam.form-control(name='steam', type='text', placeholder='Steam', autofocus='')
-        br
-        button#profileSave.i.btn.btn-lg.btn-danger.btn-block(type='submit', value='Save') Save
+      form(id='submitForm', method='POST', action='/profile')
+        .profileInformation
+          img.avatar(src='/img/avatar.png')
+          .profileData
+            input#nickname.form-control(name='nickname', type='text', placeholder='Nickname', value=user.nickname)
+            input#country.form-control(name='country', type='country', placeholder='Country', value=user.country)
+            input#timezone.form-control(name='timezone', type='timezone', placeholder='TimeZone', value=user.timezone)
+            select#purpose.form-control
+              if user.purpose=='1'
+                option(value='1', selected='selected') Chill
+              else
+                option(value='1') Chill
+              if user.purpose=='2'
+                option(value='2', selected='selected') Just for fun
+              else
+                option(value='2') Just for fun
+              if user.purpose=='3'
+                option(value='3', selected='selected') Tryhard
+              else
+                option(value='3') Tryhard
+              if user.purpose=='4'
+                option(value='4', selected='selected') Preparing to pro
+              else
+                option(value='4') Preparing to pro
+              if user.purpose=='5'
+                option(value='5', selected='selected') Professional
+              else
+                option(value='5') Professional
+            select#overallSkill.form-control
+              if user.overallskill=='1'
+                option(value='1', selected='selected') Low
+              else
+                option(value='1') Low
+              if user.overallskill=='2'
+                option(value='2', selected='selected') Average
+              else
+                option(value='2') Average
+              if user.overallskill=='3'
+                option(value='3', selected='selected') Not so high
+              else
+                option(value='3') Not so high
+              if user.overallskill=='4'
+                option(value='4', selected='selected') Really so high
+              else
+                option(value='4') Really so high
+              if user.overallskill=='5'
+                option(value='5', selected='selected') Pro
+              else
+                option(value='5') Pro
+            #time-range
+              p
+                | Time Range: 
+                span.slider-time #{user.timefrom}
+                |  - 
+                span.slider-time2 #{user.timeto}
+              .sliders_step1
+                #slider-range
+          br
+          .contacts
+            |Contacts
+            input#discord.form-control(name='discord', type='text', placeholder='Discord', value=user.discord)
+            input#steam.form-control(name='steam', type='text', placeholder='Steam', value=user.steam)
+          br
+        button#profileSave.i.btn.btn-lg.btn-danger.btn-block(form="submitForm", type='submit', value='Save') Save
       form(id='cancelForm', method='POST', action='/cancel')
         button#profileCancel.i.btn.btn-lg.btn-primary.btn-block(form="cancelForm", type='submit', value='Cancel') Cancel
       br
-      hr
-      footer
-        p.mt-2.mb-2.text-muted Copyright &copy; Vorter 2018
+    hr
+    footer
+      p.mt-2.mb-2.text-muted Copyright &copy; Vorter 2018
   script(src='/bower_components/jquery/dist/jquery.js')
   script(src='/bower_components/jquery-ui/jquery-ui.js')
   script(src='/bower_components/bootstrap/dist/js/bootstrap.js')

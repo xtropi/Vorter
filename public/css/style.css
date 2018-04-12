@@ -4,7 +4,11 @@ body {
   /*overflow: hidden;*/
   position: relative;
 }
-
+/*
+.container {
+  text-align: center;
+}
+*/
 .bg-light {
     background-color: #eee !important;
 }

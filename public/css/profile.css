@@ -1,6 +1,6 @@
 .form-control {
     display: block;
-    width: 300px; 
+    /*width: 300px;*/ 
 }
 .btn {
     position: relative;
@@ -13,15 +13,36 @@
     margin: 0 !important;
 }
 
+.container {
+    text-align: center;
+    width: 500px;
+  }
+
 #profileCancel { 
     background-color: #1458a7;
     border-color: #1458a7;
     position: relative;
-    left: 60px;
+    /*left: 60px;*/
 } 
 
 .profileData {
     position: relative;
   /*  left: 25%;
     margin-right: -25%;*/
+}
+
+#submitForm {
+    text-align: center; 
+}
+
+#profileSave {
+    text-align: center;
+}
+
+#cancelForm {
+    text-align: right;
+}
+
+.profileInformation {
+    text-align: left;
 }
