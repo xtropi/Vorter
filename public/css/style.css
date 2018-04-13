@@ -67,6 +67,7 @@ body {
   -o-animation: rotating 8s linear infinite;
   animation: rotating 8s linear infinite;
 }
+/*####################################*/
 
 .avatar {
   width: 100px;
@@ -76,11 +77,6 @@ body {
 }
 
 /* Time range picker */
-#time-range p {
-  font-family:"Arial", sans-serif;
-  font-size:14px;
-  color:#333;
-}
 .ui-slider-horizontal {
   height: 8px;
   background: #D7D7D7;
@@ -173,4 +169,13 @@ body {
 }
 .ui-slider a:focus {
   outline:none;
+}
+#timefrom {
+  display: inline-block;
+  width: 70px; 
+  
+}
+#timeto {
+  display: inline-block;
+  width: 70px; 
 }

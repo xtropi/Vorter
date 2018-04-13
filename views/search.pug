@@ -28,7 +28,7 @@ html
             .localTime
           li.nav-item.mr-3
             |Timezone:
-            .timeZone
+            .timeZone #{user.timezone}
           li.nav-item
             a.nav-link(href='/faq') FAQ
           li.nav-item
@@ -42,24 +42,27 @@ html
             li.nav-item
               a.nav-link(href='/users/login') Login
     .container
+      
       .searchParam
         .searchParam-wrap
-          input#game.form-control(name='game', type='text', placeholder='Game', autofocus='')
-          #time-range
-            p
-              | Time Range: 
-              span.slider-time 10:00 AM
-              |  - 
-              span.slider-time2 12:00 PM
-            .sliders_step1
-              #slider-range
-          select#groupSize.form-control
-            option 2
-            option 3
-            option 4
-            option 5
-          a#searchStart.btn.btn-lg.btn-danger.btn-block(type='submit', value='SearchStart') Search
-          a#searchStop.btn.btn-lg.btn-primary.btn-block.d-none(type='submit', value='SearchCancel') Cancel
+          form(id='submitForm', method='POST', action='/searchStart')
+            input#game.form-control(name='game', type='text', placeholder='Game')
+            #time-range
+              p
+                | Time range: 
+                input#timefrom.slider-time.form-control.disabled(name='timefrom', type='text', placeholder='Time from', value= user.timefrom) 
+                |  - 
+                input#timeto.slider-time2.form-control.disabled(name='timeto', type='text', placeholder='Time to', value= user.timeto) 
+              .sliders_step1
+                #slider-range
+            select#groupSize.form-control
+              option 2
+              option 3
+              option 4
+              option 5
+            button#searchStart.btn.btn-lg.btn-danger.btn-block(type='submit', value='Start') Search
+          form(id='submitForm', method='POST', action='/searchStop')
+            button#searchStop.btn.btn-lg.btn-primary.btn-block.d-none(type='submit', value='Cancel') Cancel
       .background.text-center
         br
         a.gameLink(href='#')

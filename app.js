@@ -246,6 +246,26 @@ app.post('/cancel', function(req, res){
   }
 });
 
+app.post('/searchStart', function(req, res){
+  if (!req.user){
+    res.locals.user = null;
+    res.redirect('/users/login');
+  } else {
+    res.locals.user = req.user;
+
+  }
+});
+
+app.post('/searchStop', function(req, res){
+  if (!req.user){
+    res.locals.user = null;
+    res.redirect('/users/login');
+  } else {
+    res.locals.user = req.user;
+
+  }
+});
+
 app.get('/faq', function(req, res){
   User.findById(req.user.id, function(err, user){
     res.render('faq', {
