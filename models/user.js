@@ -45,6 +45,18 @@ const UserSchema = mongoose.Schema({
   steam:{
     type: String,
     required: false
+  },
+  game:{
+    type: String,
+    required: false
+  },
+  groupsize:{
+    type: String,
+    required: false
+  },
+  searching:{
+    type: String,
+    required: false
   }
 });
 

@@ -27,8 +27,8 @@
 
 .profileData {
     position: relative;
-  /*  left: 25%;
-    margin-right: -25%;*/
+  /*  left: 25%;*/
+    margin: 50px 0 0 0;
 }
 
 #submitForm {
@@ -47,3 +47,29 @@
     text-align: left;
 }
 
+#nickname {
+    width: 300px;
+}
+.nickname {
+    padding: 15px 0 0 0;
+}
+
+.avatar {
+    float: left;
+}
+
+.form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: 30px;
+    font-size: 12px;
+    margin-bottom: 3px;
+  }
+.form-control:focus {
+    z-index: 2;
+  }
+
+ select.form-control:not([size]):not([multiple]) {
+    height: 30px;
+    padding: 0.2rem 0.5rem;;
+}

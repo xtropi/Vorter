@@ -34,6 +34,9 @@ router.post('/register', function(req, res){
   const timeto = '24:00';
   const discord = null;
   const steam = null;
+  const game = null;
+  const groupsize = '2';
+  const searching = '0';
 
   // Check values through ExpressValidator
   req.checkBody('email', 'Email is required').notEmpty();
@@ -100,7 +103,10 @@ router.post('/register', function(req, res){
       timefrom:timefrom,
       timeto:timeto,
       discord:discord,
-      steam:steam
+      steam:steam,
+      game:game,
+      groupsize:groupsize,
+      searching:searching
     });
     bcrypt.genSalt(10, function(err, salt){
       bcrypt.hash(newUser.password, salt, function(err, hash){

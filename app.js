@@ -187,7 +187,7 @@ app.get('/', function(req, res){
 app.get('/search', function(req, res){
   User.findById(req.user.id, function(err, user){
     res.render('search', {
-      nickname: user.nickname
+      user: user
     });
   });
 });
@@ -252,7 +252,30 @@ app.post('/searchStart', function(req, res){
     res.redirect('/users/login');
   } else {
     res.locals.user = req.user;
+    let query = {_id:req.user.id};
+    let newData = {
+      timefrom:req.body.timefrom,
+      timeto:req.body.timeto,
+      game:req.body.game,
+      groupsize:req.body.groupsize,
+      searching:'1'
+    };
 
+    User.findOneAndUpdate(query, newData, {upsert:true}, function(err, user){
+      if (err) {
+        req.flash("error", "Error.");
+        res.render('search', {
+          user: user
+        });
+      } else {
+        User.findById(req.user.id, function(err, user){
+          res.render('search', {
+            user: user
+          });
+        });
+      }
+
+    });
   }
 });
 
@@ -262,7 +285,26 @@ app.post('/searchStop', function(req, res){
     res.redirect('/users/login');
   } else {
     res.locals.user = req.user;
+    let query = {_id:req.user.id};
+    let newData = {
+      searching:'0'
+    };
 
+    User.findOneAndUpdate(query, newData, {upsert:true}, function(err, user){
+      if (err) {
+        req.flash("error", "Error.");
+        res.render('search', {
+          user: user
+        });
+      } else {
+        User.findById(req.user.id, function(err, user){
+          res.render('search', {
+            user: user
+          });
+        });
+      }
+
+    });
   }
 });
 

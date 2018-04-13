@@ -12,31 +12,72 @@ function hideSearchParam(){
   $('.searchParam').animate({
     left: '-285px'
   }, 200);
-
+  $(".game").removeClass("shadow");
   $('.background').animate({
     margin: '0 0 0 0px'
   }, 200);
 };
 
+function showedSearchParam(){
+  $('.searchParam').css({
+    left: '0px'
+  });
+
+  $('.background').css({
+    margin: '0 0 0 285px'
+  });
+};
+
+function hidedSearchParam(){
+  $('.searchParam').css({
+    left: '-285px'
+  });
+
+  $('.background').css({
+    margin: '0 0 0 0px'
+  });
+};
+
 let main = function() {
+  if ($("#searchStart").hasClass("d-none")) {
+    $(".game").addClass("disabled");
+    $("#"+$("#game").val()+"").removeClass("disabled");
+    $("#submitForm").addClass("disabled");
+    showedSearchParam();
+  } else {
+    $(".game").removeClass("disabled");
+    $("#submitForm").removeClass("disabled");
+    hidedSearchParam();
+  }
+
   $('.gameLink').click(function() {
     showSearchParam();
   });
 
   $("#dota2").click(function() {
-    $("#game").val("Dota2");
+    $("#game").val("dota2");
+    $(".game").removeClass("shadow");
+    $(this).addClass("shadow");
   });
   $("#csgo").click(function() {
-    $("#game").val("CS GO");
+    $("#game").val("csgo");
+    $(".game").removeClass("shadow");
+    $(this).addClass("shadow");
   });
   $("#pubg").click(function() {
-    $("#game").val("PUBG");
+    $("#game").val("pubg");
+    $(".game").removeClass("shadow");
+    $(this).addClass("shadow");
   });
   $("#fortnite").click(function() {
-    $("#game").val("Fortnite");
+    $("#game").val("fortnite");
+    $(".game").removeClass("shadow");
+    $(this).addClass("shadow");
   });
   $("#lol").click(function() {
-    $("#game").val("League of legends");
+    $("#game").val("lol");
+    $(".game").removeClass("shadow");
+    $(this).addClass("shadow");
   });
 
   $('.container').click(function(e) {
