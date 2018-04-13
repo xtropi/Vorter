@@ -206,7 +206,33 @@ app.post('/profile', function(req, res){
     res.redirect('/users/login');
   } else {
     res.locals.user = req.user;
-    res.redirect('/search');
+    let query = {_id:req.user.id};
+    let newData = {
+      nickname:req.body.nickname,
+      timezone:req.body.timezone,
+      country:req.body.country,
+      purpose:req.body.purpose,
+      overallskill:req.body.overallskill,
+      timefrom:req.body.timefrom,
+      timeto:req.body.timeto,
+      discord:req.body.discord,
+      steam:req.body.steam
+    };
+
+    User.findOneAndUpdate(query, newData, {upsert:true}, function(err, user){
+      if (err) {
+        req.flash("error", "Error.");
+        res.render('profile', {
+          user: user
+        });
+      } else {
+        req.flash("success", "Successful changed.");
+        res.render('profile', {
+          user: newData
+        });
+      }
+
+    });
   }
 });
 

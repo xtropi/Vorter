@@ -26,7 +26,11 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: false
   },
-  timerange:{
+  timefrom:{
+    type: String,
+    required: false
+  },
+  timeto:{
     type: String,
     required: false
   },

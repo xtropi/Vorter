@@ -26,6 +26,14 @@ router.post('/register', function(req, res){
   const nickname = req.body.nickname;
   const password = req.body.password;
   const password2 = req.body.password2;
+  const timezone = req.body.timezone;
+  const country = req.body.country;
+  const purpose = '2';
+  const overallskill = '2';
+  const timefrom = null;
+  const timeto = null;
+  const discord = null;
+  const steam = null;
 
   // Check values through ExpressValidator
   req.checkBody('email', 'Email is required').notEmpty();
@@ -83,8 +91,16 @@ router.post('/register', function(req, res){
   function createUser(){
     let newUser = new User({
       email:email,
+      password:password,
       nickname:nickname,
-      password:password
+      timezone:timezone,
+      country:country,
+      purpose:purpose,
+      overallskill:overallskill,
+      timefrom:timefrom,
+      timeto:timeto,
+      discord:discord,
+      steam:steam
     });
     bcrypt.genSalt(10, function(err, salt){
       bcrypt.hash(newUser.password, salt, function(err, hash){
