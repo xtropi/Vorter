@@ -4,7 +4,7 @@ $(document).ready(function(){
   let datearray = datetext.split(' ');
   datetext = datearray[0];
   let timezone = datearray[1];
-  $(".timeZone")[0].innerText=timezone;
+  //$(".timeZone")[0].innerText=timezone;
 
   setInterval(function(){
     d = new Date();

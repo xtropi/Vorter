@@ -28,7 +28,7 @@ html
             .localTime
           li.nav-item.mr-3
             |Timezone:
-            .timeZone
+            .timeZone #{user.timezone}
           li.nav-item
             a.nav-link(href='/faq') FAQ
           li.nav-item
@@ -49,18 +49,17 @@ html
           .profileData
             input#nickname.form-control(name='nickname', type='text', placeholder='Nickname', value=user.nickname)
             input#country.form-control(name='country', type='text', placeholder='Country', value=user.country)
-            //input#timezone.form-control(name='timezone', type='text', placeholder='TimeZone', value=user.timezone)
             select#timezone.form-control(name='timezone', required='')
               - var n=-12
               while n<15
                 if (n<=-10)
-                  option(value='GMT'+ n +'00') GMT #{n}:00
+                  option(value='GMT'+ n +'00' selected= user.timezone=='GMT'+ n +'00') GMT #{n}:00
                 if (-10<n)&&(n<0)
-                  option(value='GMT-0'+ (-n) +'00') GMT -0#{(-n)}:00
+                  option(value='GMT-0'+ (-n) +'00' selected= user.timezone=='GMT-0'+ (-n) +'00') GMT -0#{(-n)}:00
                 if (0<=n)&&(n<10)
-                  option(value='GMT+0'+ n +'00') GMT +0#{n}:00
+                  option(value='GMT+0'+ n +'00' selected= user.timezone=='GMT+0'+ n +'00') GMT +0#{n}:00
                 if (10<=n)
-                  option(value='GMT+'+ n +'00') GMT +#{n}:00
+                  option(value='GMT+'+ n +'00' selected= user.timezone=='GMT+'+ n +'00') GMT +#{n}:00
                 - n++
             select#purpose.form-control(name='purpose', type='text')
               if user.purpose=='1'
