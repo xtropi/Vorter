@@ -30,8 +30,8 @@ router.post('/register', function(req, res){
   const country = req.body.country;
   const purpose = '2';
   const overallskill = '2';
-  const timefrom = null;
-  const timeto = null;
+  const timefrom = '0:00';
+  const timeto = '24:00';
   const discord = null;
   const steam = null;
 
