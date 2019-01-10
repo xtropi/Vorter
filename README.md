@@ -7,14 +7,14 @@ and most important - algorithm to make a high-compatibility groups from online a
 
 ### INSTALL
 
-firstly create db named vorter
+1)Create db named "vorter"
 
-Create MongoDB user
+2)Create MongoDB user
 
     use admin
     db.createUser({user: "<login>", pwd: "<pass>",roles: [{role:"dbOwner", db:"admin"}]})
 
-Environments
+3)Environments
 
     NODE_ENV = development (or production)
     VORTER_LOCAL_DB = mongodb://<login>:<pass>@localhost:27017/vorter?authSource=admin
