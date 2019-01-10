@@ -5,9 +5,9 @@ I want to make a good-look site with authentification, deep settings, chat maybe
 and most important - algorithm to make a high-compatibility groups from online and in-search registered users.
 
 
-INSTALL
+### INSTALL
 
-    firstly create db named vorter
+firstly create db named vorter
 
 Create MongoDB user
 
