@@ -15,6 +15,7 @@ Create MongoDB user
     db.createUser({user: "<login>", pwd: "<pass>",roles: [{role:"dbOwner", db:"admin"}]})
 
 Environments
+
     NODE_ENV = development (or production)
     VORTER_LOCAL_DB = mongodb://<login>:<pass>@localhost:27017/vorter?authSource=admin
     VORTER_REMOTE_DB = mongodb://<login>:<pass>@<mysite.net>:27017/vorter?authSource=admin
