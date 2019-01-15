@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy
-const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const { Client } = require('pg');
 
 module.exports = function(passport){
   //Local LocalStrategy
@@ -11,22 +11,24 @@ module.exports = function(passport){
   function(email, password, done){
     // Match case-insensitive useremail
     let email_r = new RegExp(["^", email, "$"].join(""), "i");
-    let query = {email:email_r};
-    User.findOne(query, function(err, user){
-      if (err) throw err;
-      if (!user){
-        return done(null, false, {message: 'No user found'});
-      }
 
-      // Match password
-      bcrypt.compare(password, user.password, function(err, isMatch){
-        if (err) throw err;
-        if (isMatch){
-          return done(null, user);
-        } else {
-          return done(null, false, {message: 'Wrong password'});
+    client.query(`SELECT * FROM USERS WHERE EMAIL = ${email_r}`, (err, user) => {
+      if (err){
+        console.log(err);
+      } else {
+        if (!user){
+          return done(null, false, {message: 'No user found'});
         }
-      });
+              // Match password
+        bcrypt.compare(password, user.password, function(err, isMatch){
+          if (err) throw err;
+          if (isMatch){
+            return done(null, user);
+          } else {
+            return done(null, false, {message: 'Wrong password'});
+          }
+        });
+      };
     });
   }));
 
@@ -34,8 +36,12 @@ module.exports = function(passport){
     done(null, user.id);
   });
   passport.deserializeUser(function(id, done){
-    User.findById(id, function(err, user){
-      done(err, user);
+    client.query(`SELECT * FROM USERS WHERE ID = ${id}`, (err, user) => {
+      if (err){
+        console.log(err);
+      } else {
+        done(err, user);
+      };
     });
   });
 }

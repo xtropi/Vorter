@@ -84,7 +84,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Express Session Middleware
 app.use(session({
   secret: 'keyboard cat',
-  store: new (require('connect-pg-simple')(session))(),
+//  store: new (require('connect-pg-simple')(session))(),
   resave: false,
   saveUninitialized: true,
 }));
@@ -308,7 +308,7 @@ app.get('*', function(req, res, next){
 
 //! STARTING
 // start database
-connectToDB();
+//connectToDB();
 
 // start server
 if (secure){
