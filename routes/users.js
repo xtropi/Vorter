@@ -3,10 +3,6 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 
-
-// Bring in User Model
-let User = require('../models/user');
-
 // Register Form
 router.get('/register', function(req, res){
   if (!req.user){
@@ -70,58 +66,61 @@ router.post('/register', function(req, res){
   function checkOnExist(email, nickname, callback) {
     let existEmail = false;
     let existNickname = false;
-    User.findOne({email: email}, function(err, user) {
-      if (err) {
+
+    client.query(`SELECT * FROM USERS WHERE EMAIL = ${email}`, (err, user) => {
+      if (err){
         callback(err, null, true, true);
       } else {
-          if (user){
-            existEmail = true;
-          }
-          User.findOne({nickname: nickname}, function(err, user) {
-            if (err) {
-              callback(err, null, true, true);
-            } else {
-                if (user){
-                  existNickname = true;
-                }
-                callback(null, user, existEmail, existNickname);
-              }
-          });
+        if (user){
+          existEmail = true;
         }
+        client.query(`SELECT * FROM USERS WHERE NICKNAME = ${nickname}`, (err, user) => {
+          if (err){
+            callback(err, null, true, true);
+          } else {
+            if (user){
+              existNickname = true;
+            }
+            callback(null, user, existEmail, existNickname);
+          };
+        });
+      };
     });
   };
 
   function createUser(){
-    let newUser = new User({
-      email:email,
-      password:password,
-      nickname:nickname,
-      timezone:timezone,
-      country:country,
-      purpose:purpose,
-      overallskill:overallskill,
-      timefrom:timefrom,
-      timeto:timeto,
-      discord:discord,
-      steam:steam,
-      game:game,
-      groupsize:groupsize,
-      searching:searching
-    });
     bcrypt.genSalt(10, function(err, salt){
-      bcrypt.hash(newUser.password, salt, function(err, hash){
+      bcrypt.hash(password, salt, function(err, hash){
         if (err){
           return console.log(err);
         }
-        newUser.password = hash;
-        newUser.save(function(err){
+        password = hash;
+        
+        client.query(`
+        INSERT INTO users (
+          email, password,
+          nickname, timezone, 
+          country, purpose, 
+          overallskill, timefrom, 
+          timeto, discord, 
+          steam, game, 
+          groupsize,searching)
+        VALUES (
+          ${email}, ${password},
+          ${nickname}, ${timezone},
+          ${country}, ${purpose},
+          ${overallskill}, ${timefrom}, 
+          ${timeto}, ${discord},
+          ${steam}, ${game},
+          ${groupsize}, ${searching})
+        `, (err, user) => {
           if (err){
             return console.log(err);
           } else {
             req.flash("success", "Successful registered.");
             res.redirect('/users/login');
           }
-        })
+        }); 
       });
     });
   };

@@ -8,11 +8,10 @@ const https = require('https');
 const http = require('http');
 const express = require('express');
 const path = require('path');
-const mongoose = require('mongoose');
+const { Client } = require('pg');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const passport = require('passport');
 const app = express();
@@ -41,7 +40,7 @@ if (!selectedDB){
   console.log("Database Error!");
   process.exit(0);
 }
-let db = mongoose.connection;
+
 let connectedToDB;
 
 // functions
@@ -49,49 +48,19 @@ function startNotice(port){
   console.log(`Server started on port ${port}`);
 };
 
-function connectToDB() {
-  mongoose.connect(selectedDB);
-};
 
+const client = new Client({
+  connectionString: selectedDB,
+});
+client.connect()
+  .then(() => console.log('PostgreSQL connected.'))
+  .catch(e => console.error('Connection error.', err.stack));
 
 //! INITIALIZATIONS
 // readline interface
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
-});
-
-// MongoDB Events
-db.on('connecting', function () {
-  connectedToDB = false;
-  console.log('MongoDB: Connecting...');
-});
-db.on('connected', function () {
-  console.log('MongoDB: Connected.');
-});
-db.on('open', function(){
-  connectedToDB = true;
-  console.log('MongoDB: Connection opened.');
-});
-db.on('disconnected', function () {
-  connectedToDB = false;
-  console.log('MongoDB: Disconnected.');
-});
-db.on('disconnect', function (err) {
-  console.log('MongoDB: Disconnecting with error- ', err);
-});
-db.on('close', function () {
-  console.log('MongoDB: Connection closed.');
-});
-db.on('reconnected', function () {
-    console.log('MongoDB: Reconnected.');
-});
-db.on('reconnecting', function () {
-  console.log('MongoDB: Reconnecting...');
-});
-db.on('error', function(err){
-  connectedToDB = false;
-  console.log('MongoDB: ERROR-', err);
 });
 
 // Load View Engine
@@ -115,8 +84,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Express Session Middleware
 app.use(session({
   secret: 'keyboard cat',
-  store: new MongoStore({ mongooseConnection: db }),
-  resave: true,
+  store: new (require('connect-pg-simple')(session))(),
+  resave: false,
   saveUninitialized: true,
 }));
 
@@ -158,7 +127,6 @@ redirectApp.get('*', function(req, res, next){
 
 // route Files
 let users = require('./routes/users');
-let User = require('./models/user');
 app.use('/users', users);
 
 app.get('*', function(req, res, next){
@@ -185,18 +153,26 @@ app.get('/', function(req, res){
 });
 
 app.get('/search', function(req, res){
-  User.findById(req.user.id, function(err, user){
-    res.render('search', {
-      user: user
-    });
+  client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
+    if (err){
+      console.log(err);
+    } else {
+      res.render('search', {
+        user: user
+      });
+    };
   });
 });
 
 app.get('/profile', function(req, res){
-  User.findById(req.user.id, function(err, user){
+  client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
+    if (err){
+      console.log(err);
+    } else {
     res.render('profile', {
       user: user
     });
+    };
   });
 });
 
@@ -206,20 +182,16 @@ app.post('/profile', function(req, res){
     res.redirect('/users/login');
   } else {
     res.locals.user = req.user;
-    let query = {_id:req.user.id};
-    let newData = {
-      nickname:req.body.nickname,
-      timezone:req.body.timezone,
-      country:req.body.country,
-      purpose:req.body.purpose,
-      overallskill:req.body.overallskill,
-      timefrom:req.body.timefrom,
-      timeto:req.body.timeto,
-      discord:req.body.discord,
-      steam:req.body.steam
-    };
 
-    User.findOneAndUpdate(query, newData, {upsert:true}, function(err, user){
+    client.query(`
+    UPDATE users SET (
+      nickname = ${req.user.nickname}, timezone = ${req.user.timezone},
+      country = ${req.user.country},  purpose = ${req.user.purpose},
+      overallskill = ${req.user.overallskill}, timefrom = ${req.user.timefrom}, 
+      timeto = ${req.user.timeto},  discord = ${req.user.discord},
+      steam = ${req.user.steam})  
+    WHERE ID = ${req.user.id}
+    `, (err, user) => {
       if (err) {
         req.flash("error", "Error.");
         res.render('profile', {
@@ -228,11 +200,10 @@ app.post('/profile', function(req, res){
       } else {
         req.flash("success", "Successful changed.");
         res.render('profile', {
-          user: newData
+          user: user
         });
       }
-
-    });
+    }); 
   }
 });
 
@@ -252,30 +223,29 @@ app.post('/searchStart', function(req, res){
     res.redirect('/users/login');
   } else {
     res.locals.user = req.user;
-    let query = {_id:req.user.id};
-    let newData = {
-      timefrom:req.body.timefrom,
-      timeto:req.body.timeto,
-      game:req.body.game,
-      groupsize:req.body.groupsize,
-      searching:'1'
-    };
 
-    User.findOneAndUpdate(query, newData, {upsert:true}, function(err, user){
+    client.query(`
+    UPDATE users SET (
+      timefrom = ${req.user.timefrom}, 
+      timeto = ${req.user.timeto}, 
+      game = ${req.user.game},
+      groupsize = ${req.user.groupsize},
+      searching = 1)  
+    WHERE ID = ${req.user.id}
+    `, (err, user) => {
       if (err) {
         req.flash("error", "Error.");
         res.render('search', {
           user: user
         });
       } else {
-        User.findById(req.user.id, function(err, user){
+        client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
           res.render('search', {
             user: user
           });
         });
       }
-
-    });
+    }); 
   }
 });
 
@@ -290,26 +260,28 @@ app.post('/searchStop', function(req, res){
       searching:'0'
     };
 
-    User.findOneAndUpdate(query, newData, {upsert:true}, function(err, user){
+    client.query(`
+    UPDATE users SET (searching = 0)  
+    WHERE ID = ${req.user.id}
+    `, (err, user) => {
       if (err) {
         req.flash("error", "Error.");
         res.render('search', {
           user: user
         });
       } else {
-        User.findById(req.user.id, function(err, user){
+        client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
           res.render('search', {
             user: user
           });
         });
       }
-
-    });
+    }); 
   }
 });
 
 app.get('/faq', function(req, res){
-  User.findById(req.user.id, function(err, user){
+  client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
     res.render('faq', {
       nickname: user.nickname
     });
@@ -317,7 +289,7 @@ app.get('/faq', function(req, res){
 });
 
 app.get('/about', function(req, res){
-  User.findById(req.user.id, function(err, user){
+  client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
     res.render('about', {
       nickname: user.nickname
     });
@@ -354,18 +326,8 @@ if (secure){
 // console events (readline)
 rl.on('line', (input) => {
   switch(input){
-  case 'stop':
-    if (server){
-      console.log('Stopping server...');
-      server.close();
-      server = (function () { return; })(); //set underfined
-      console.log('Server stopped.');
-    }
-    if (connectedToDB){
-      db.close();
-    }
-  break;
 
+  case 'stop':
   case 'exit':
   case 'quit':
   case 'q':
@@ -376,19 +338,19 @@ rl.on('line', (input) => {
       console.log('Server stopped.');
     }
     if (connectedToDB){
-      db.close();
+      client.end();
     }
     process.exit(0);
   break;
 
-  case 'db restart':
-    if (connectedToDB){
-      db.close();
-    }
-    setTimeout(function(){
-      connectToDB();
-    }, 3000);
-  break;
+  // case 'db restart':
+  //   if (connectedToDB){
+  //     db.close();
+  //   }
+  //   setTimeout(function(){
+  //     connectToDB();
+  //   }, 3000);
+  // break;
   // case 'start':
   //   if (!connectedToDB){
   //     connectToDB();
@@ -439,15 +401,15 @@ rl.on('line', (input) => {
   //   console.log(`Current port: ${port}`);
   // break;
 
-  case 'db set local':
-    selectedDB = localDB;
-    console.log('Selected database: local.');
-  break;
+  // case 'db set local':
+  //   selectedDB = localDB;
+  //   console.log('Selected database: local.');
+  // break;
 
-  case 'db set remote':
-    selectedDB = remoteDB;
-    console.log('Selected database: remote.');
-  break;
+  // case 'db set remote':
+  //   selectedDB = remoteDB;
+  //   console.log('Selected database: remote.');
+  // break;
 
   default:
     console.log(`Unknown command: ${input}`);
