@@ -8,7 +8,7 @@ const https = require('https');
 const http = require('http');
 const express = require('express');
 const path = require('path');
-const { Client } = require('pg');
+const { Client, Pool } = require('pg');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const session = require('express-session');
@@ -49,12 +49,17 @@ function startNotice(port){
 };
 
 
-const client = new Client({
+const db = new Client({
   connectionString: selectedDB,
 });
-client.connect()
+
+
+
+db.connect()
   .then(() => console.log('PostgreSQL connected.'))
   .catch(e => console.error('Connection error.', err.stack));
+
+module.exports.db = db;
 
 //! INITIALIZATIONS
 // readline interface
@@ -153,10 +158,11 @@ app.get('/', function(req, res){
 });
 
 app.get('/search', function(req, res){
-  client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
+  db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
     if (err){
       console.log(err);
     } else {
+      if (result.rows[0]) user=result.rows[0];
       res.render('search', {
         user: user
       });
@@ -165,7 +171,7 @@ app.get('/search', function(req, res){
 });
 
 app.get('/profile', function(req, res){
-  client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
+  db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
     if (err){
       console.log(err);
     } else {
@@ -183,7 +189,7 @@ app.post('/profile', function(req, res){
   } else {
     res.locals.user = req.user;
 
-    client.query(`
+    db.query(`
     UPDATE users SET (
       nickname = ${req.user.nickname}, timezone = ${req.user.timezone},
       country = ${req.user.country},  purpose = ${req.user.purpose},
@@ -191,7 +197,7 @@ app.post('/profile', function(req, res){
       timeto = ${req.user.timeto},  discord = ${req.user.discord},
       steam = ${req.user.steam})  
     WHERE ID = ${req.user.id}
-    `, (err, user) => {
+    `, (err, result) => {
       if (err) {
         req.flash("error", "Error.");
         res.render('profile', {
@@ -224,7 +230,7 @@ app.post('/searchStart', function(req, res){
   } else {
     res.locals.user = req.user;
 
-    client.query(`
+    db.query(`
     UPDATE users SET (
       timefrom = ${req.user.timefrom}, 
       timeto = ${req.user.timeto}, 
@@ -232,14 +238,14 @@ app.post('/searchStart', function(req, res){
       groupsize = ${req.user.groupsize},
       searching = 1)  
     WHERE ID = ${req.user.id}
-    `, (err, user) => {
+    `, (err, result) => {
       if (err) {
         req.flash("error", "Error.");
         res.render('search', {
           user: user
         });
       } else {
-        client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
+        db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
           res.render('search', {
             user: user
           });
@@ -260,17 +266,17 @@ app.post('/searchStop', function(req, res){
       searching:'0'
     };
 
-    client.query(`
+    db.query(`
     UPDATE users SET (searching = 0)  
     WHERE ID = ${req.user.id}
-    `, (err, user) => {
+    `, (err, result) => {
       if (err) {
         req.flash("error", "Error.");
         res.render('search', {
           user: user
         });
       } else {
-        client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
+        db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
           res.render('search', {
             user: user
           });
@@ -281,7 +287,7 @@ app.post('/searchStop', function(req, res){
 });
 
 app.get('/faq', function(req, res){
-  client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
+  db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
     res.render('faq', {
       nickname: user.nickname
     });
@@ -289,7 +295,7 @@ app.get('/faq', function(req, res){
 });
 
 app.get('/about', function(req, res){
-  client.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
+  db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
     res.render('about', {
       nickname: user.nickname
     });
@@ -338,7 +344,7 @@ rl.on('line', (input) => {
       console.log('Server stopped.');
     }
     if (connectedToDB){
-      client.end();
+      db.end();
     }
     process.exit(0);
   break;

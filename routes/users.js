@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-const { Client } = require('pg');
+const db = require('../db');
 
 // Register Form
 router.get('/register', function(req, res){
@@ -67,21 +67,21 @@ router.post('/register', function(req, res){
   function checkOnExist(email, nickname, callback) {
     let existEmail = false;
     let existNickname = false;
-
-    client.query(`SELECT * FROM USERS WHERE EMAIL = ${email}`, (err, user) => {
+    db.query(`SELECT * FROM USERS WHERE EMAIL = '${email}'`, (err, result) => {
       if (err){
-        callback(err, null, true, true);
+        console.log(err);
       } else {
         if (user){
+          console.log(user.rows);
           existEmail = true;
-        }
-        client.query(`SELECT * FROM USERS WHERE NICKNAME = ${nickname}`, (err, user) => {
+        } else {callback(err, null, true, true);}
+        db.query(`SELECT * FROM USERS WHERE NICKNAME = '${nickname}'`, (err, result) => {
           if (err){
-            callback(err, null, true, true);
+            console.log(err);
           } else {
             if (user){
               existNickname = true;
-            }
+            } else {callback(err, null, true, true);}
             callback(null, user, existEmail, existNickname);
           };
         });
@@ -97,7 +97,7 @@ router.post('/register', function(req, res){
         }
         password = hash;
         
-        client.query(`
+        db.query(`
         INSERT INTO users (
           email, password,
           nickname, timezone, 
@@ -107,14 +107,14 @@ router.post('/register', function(req, res){
           steam, game, 
           groupsize,searching)
         VALUES (
-          ${email}, ${password},
-          ${nickname}, ${timezone},
-          ${country}, ${purpose},
-          ${overallskill}, ${timefrom}, 
-          ${timeto}, ${discord},
-          ${steam}, ${game},
-          ${groupsize}, ${searching})
-        `, (err, user) => {
+          '${email}', '${password}',
+          '${nickname}', '${timezone}',
+          '${country}','${purpose}',
+          '${overallskill}', '${timefrom}', 
+          '${timeto}', '${discord}',
+          '${steam}', '${game}',
+          '${groupsize}', '${searching}')
+        `, (err, result) => {
           if (err){
             return console.log(err);
           } else {

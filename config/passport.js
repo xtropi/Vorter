@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcryptjs');
-const { Client } = require('pg');
+const db = require('../db');
 
 module.exports = function(passport){
   //Local LocalStrategy
@@ -12,7 +12,7 @@ module.exports = function(passport){
     // Match case-insensitive useremail
     let email_r = new RegExp(["^", email, "$"].join(""), "i");
 
-    client.query(`SELECT * FROM USERS WHERE EMAIL = ${email_r}`, (err, user) => {
+    db.query(`SELECT * FROM USERS WHERE EMAIL = ${email_r}`, (err, result) => {
       if (err){
         console.log(err);
       } else {
@@ -36,7 +36,7 @@ module.exports = function(passport){
     done(null, user.id);
   });
   passport.deserializeUser(function(id, done){
-    client.query(`SELECT * FROM USERS WHERE ID = ${id}`, (err, user) => {
+    db.query(`SELECT * FROM USERS WHERE ID = ${id}`, (err, result) => {
       if (err){
         console.log(err);
       } else {
