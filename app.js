@@ -16,6 +16,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const app = express();
 const redirectApp = express();
+const router = express.Router();
 
 //environment variables
 const environment = process.env.NODE_ENV;
@@ -158,31 +159,49 @@ app.get('/', function(req, res){
 });
 
 app.get('/search', function(req, res){
-  db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
+  db.query(`SELECT * FROM USERS WHERE ID = '${req.user.id}'`, (err, result) => {
     if (err){
       console.log(err);
     } else {
-      if (result.rows[0]) user=result.rows[0];
-      res.render('search', {
-        user: user
-      });
+      if (result.rows[0]) {
+        user=result.rows[0];
+        res.render('search', {
+          user: user
+        });
+      };
     };
   });
 });
 
 app.get('/profile', function(req, res){
-  db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
+  db.query(`SELECT * FROM USERS WHERE ID = '${req.user.id}'`, (err, result) => {
     if (err){
       console.log(err);
     } else {
-    res.render('profile', {
-      user: user
-    });
+      if (result.rows[0]) {
+        user=result.rows[0];
+        res.render('profile', {
+          user: user
+        });
+      };
     };
   });
 });
 
 app.post('/profile', function(req, res){
+  bump = `
+  UPDATE users SET 
+    nickname = '${req.user.nickname}', timezone = '${req.user.timezone}',
+    country = '${req.user.country}',  purpose = '${req.user.purpose}',
+    overallskill = '${req.user.overallskill}', timefrom = '${req.user.timefrom}', 
+    timeto = '${req.user.timeto}',  discord = '${req.user.discord}',
+    steam = '${req.user.steam}'
+  WHERE ID = '${req.user.id}'
+  RETURNING *
+  `;
+
+  console.log(bump);
+
   if (!req.user){
     res.locals.user = null;
     res.redirect('/users/login');
@@ -190,24 +209,32 @@ app.post('/profile', function(req, res){
     res.locals.user = req.user;
 
     db.query(`
-    UPDATE users SET (
-      nickname = ${req.user.nickname}, timezone = ${req.user.timezone},
-      country = ${req.user.country},  purpose = ${req.user.purpose},
-      overallskill = ${req.user.overallskill}, timefrom = ${req.user.timefrom}, 
-      timeto = ${req.user.timeto},  discord = ${req.user.discord},
-      steam = ${req.user.steam})  
-    WHERE ID = ${req.user.id}
+    UPDATE users SET 
+      nickname = '${req.user.nickname}', timezone = '${req.user.timezone}',
+      country = '${req.user.country}',  purpose = '${req.user.purpose}',
+      overallskill = '${req.user.overallskill}', timefrom = '${req.user.timefrom}', 
+      timeto = '${req.user.timeto}',  discord = '${req.user.discord}',
+      steam = '${req.user.steam}'
+    WHERE ID = '${req.user.id}'
+    RETURNING *
     `, (err, result) => {
       if (err) {
-        req.flash("error", "Error.");
-        res.render('profile', {
-          user: user
-        });
+        console.log(err);
       } else {
-        req.flash("success", "Successful changed.");
-        res.render('profile', {
-          user: user
-        });
+        if (result.rows[0]) {
+          user=result.rows[0];
+          req.flash("success", "Successful changed.");
+          res.render('profile', {
+            user: user
+          });
+        } else {
+          user=result.rows[0];
+          req.flash("error", "Error.");
+          res.render('profile', {
+            user: user
+          });
+        };
+
       }
     }); 
   }
@@ -230,26 +257,42 @@ app.post('/searchStart', function(req, res){
   } else {
     res.locals.user = req.user;
 
+    bump = `
+    UPDATE users SET
+      timefrom = '${req.user.timefrom}',
+      timeto = '${req.user.timeto}',
+      game = '${req.user.game}',
+      groupsize = '${req.user.groupsize}',
+      searching = '1'
+    WHERE ID = '${req.user.id}'
+    RETURNING *
+    `;
     db.query(`
-    UPDATE users SET (
-      timefrom = ${req.user.timefrom}, 
-      timeto = ${req.user.timeto}, 
-      game = ${req.user.game},
-      groupsize = ${req.user.groupsize},
-      searching = 1)  
-    WHERE ID = ${req.user.id}
+    UPDATE users SET
+      timefrom = '${req.user.timefrom}',
+      timeto = '${req.user.timeto}',
+      game = '${req.user.game}',
+      groupsize = '${req.user.groupsize}',
+      searching = '1'
+    WHERE ID = '${req.user.id}'
+    RETURNING *
     `, (err, result) => {
       if (err) {
-        req.flash("error", "Error.");
-        res.render('search', {
-          user: user
-        });
+        console.log(err);
       } else {
-        db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, user) => {
+        if (result.rows[0]) {
+          console.log(bump);
+          user=result.rows[0];
           res.render('search', {
             user: user
           });
-        });
+        } else {
+          user=result.rows[0];
+          req.flash("error", "Error.");
+          res.render('search', {
+            user: user
+          });
+        };
       }
     }); 
   }
@@ -261,44 +304,53 @@ app.post('/searchStop', function(req, res){
     res.redirect('/users/login');
   } else {
     res.locals.user = req.user;
-    let query = {_id:req.user.id};
-    let newData = {
-      searching:'0'
-    };
 
     db.query(`
-    UPDATE users SET (searching = 0)  
-    WHERE ID = ${req.user.id}
+    UPDATE users SET searching = '0' 
+    WHERE ID = '${req.user.id}'
+    RETURNING *
     `, (err, result) => {
       if (err) {
-        req.flash("error", "Error.");
-        res.render('search', {
-          user: user
-        });
+        console.log(err);
       } else {
-        db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
+        if (result.rows[0]) {
+          user=result.rows[0];
+          db.query(`SELECT * FROM USERS WHERE ID = '${req.user.id}'`, (err, result) => {
+            res.render('search', {
+              user: user
+            });
+          });
+        } else {
+          user=result.rows[0];
+          req.flash("error", "Error.");
           res.render('search', {
             user: user
           });
-        });
+        };
       }
     }); 
   }
 });
 
 app.get('/faq', function(req, res){
-  db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
-    res.render('faq', {
-      nickname: user.nickname
-    });
+  db.query(`SELECT * FROM USERS WHERE ID = '${req.user.id}'`, (err, result) => {
+    if (result.rows[0]) {
+      user=result.rows[0];
+      res.render('faq', {
+        nickname: user.nickname
+      });
+    };
   });
 });
 
 app.get('/about', function(req, res){
-  db.query(`SELECT * FROM USERS WHERE ID = ${req.user.id}`, (err, result) => {
-    res.render('about', {
-      nickname: user.nickname
-    });
+  db.query(`SELECT * FROM USERS WHERE ID = '${req.user.id}'`, (err, result) => {
+    if (result.rows[0]) {
+      user=result.rows[0];
+      res.render('about', {
+        nickname: user.nickname
+      });
+    };
   });
 });
 

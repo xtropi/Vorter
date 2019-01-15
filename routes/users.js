@@ -50,7 +50,7 @@ router.post('/register', function(req, res){
     });
   } else {
     // Check email & nickname in database
-    checkOnExist(email, nickname, function(err, user, existEmail, existNickname) {
+    checkOnExist(email, nickname, function(err, existEmail, existNickname) {
       if (err) {
         console.log(err);
       }
@@ -58,8 +58,8 @@ router.post('/register', function(req, res){
         createUser();
       } else {
         if (existEmail) {req.flash("danger", "Email is exist");}; // Email is already exist
-        //if (existNickname) {req.flash("danger", "Nickname is exist");}; // nickname is already exist
-        res.redirect('/users/register');
+        if (existNickname) {req.flash("danger", "Nickname is exist");}; // nickname is already exist
+        //res.redirect('/users/register');
       }
     });
   };
@@ -71,18 +71,17 @@ router.post('/register', function(req, res){
       if (err){
         console.log(err);
       } else {
-        if (user){
-          console.log(user.rows);
+        if (result.rows.length>0){
           existEmail = true;
-        } else {callback(err, null, true, true);}
+        };
         db.query(`SELECT * FROM USERS WHERE NICKNAME = '${nickname}'`, (err, result) => {
           if (err){
             console.log(err);
           } else {
-            if (user){
+            if (result.rows.length>0){
               existNickname = true;
-            } else {callback(err, null, true, true);}
-            callback(null, user, existEmail, existNickname);
+              callback(err, existEmail, existNickname);
+            } else {callback(err, existEmail, existNickname);}
           };
         });
       };
@@ -95,7 +94,7 @@ router.post('/register', function(req, res){
         if (err){
           return console.log(err);
         }
-        password = hash;
+        //password = hash;
         
         db.query(`
         INSERT INTO users (
@@ -107,7 +106,7 @@ router.post('/register', function(req, res){
           steam, game, 
           groupsize,searching)
         VALUES (
-          '${email}', '${password}',
+          '${email}', '${hash}',
           '${nickname}', '${timezone}',
           '${country}','${purpose}',
           '${overallskill}', '${timefrom}', 

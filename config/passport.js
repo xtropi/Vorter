@@ -10,20 +10,21 @@ module.exports = function(passport){
   },
   function(email, password, done){
     // Match case-insensitive useremail
-    let email_r = new RegExp(["^", email, "$"].join(""), "i");
+    //let email_r = new RegExp(["^", email, "$"].join(""), "i");
+    let email_r = email.toLowerCase();
 
-    db.query(`SELECT * FROM USERS WHERE EMAIL = ${email_r}`, (err, result) => {
+    db.query(`SELECT * FROM USERS WHERE EMAIL = '${email_r}'`, (err, result) => {
       if (err){
         console.log(err);
       } else {
-        if (!user){
+        if (!result.rows[0]){
           return done(null, false, {message: 'No user found'});
         }
               // Match password
-        bcrypt.compare(password, user.password, function(err, isMatch){
+        bcrypt.compare(password, result.rows[0].password, function(err, isMatch){
           if (err) throw err;
           if (isMatch){
-            return done(null, user);
+            return done(null, result.rows[0]);
           } else {
             return done(null, false, {message: 'Wrong password'});
           }
@@ -36,11 +37,11 @@ module.exports = function(passport){
     done(null, user.id);
   });
   passport.deserializeUser(function(id, done){
-    db.query(`SELECT * FROM USERS WHERE ID = ${id}`, (err, result) => {
+    db.query(`SELECT * FROM USERS WHERE ID = '${id}'`, (err, result) => {
       if (err){
         console.log(err);
       } else {
-        done(err, user);
+        done(err, result.rows[0]);
       };
     });
   });
