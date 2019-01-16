@@ -45,7 +45,7 @@ html
       .searchParam
         .searchParam-wrap
           form(id='submitForm', method='POST', action='/searchStart')
-            input#game.form-control(name='game', type='text', placeholder='Game', value=user.game)
+            input#game.form-control.d-none(name='game', type='text', placeholder='Game', value=user.game)
             #time-range
               | Time range: 
               input#timefrom.slider-time.form-control(name='timefrom', type='text', placeholder='Time from', value= user.timefrom) 
