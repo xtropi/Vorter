@@ -189,19 +189,6 @@ app.get('/profile', function(req, res){
 });
 
 app.post('/profile', function(req, res){
-  bump = `
-  UPDATE users SET 
-    nickname = '${req.user.nickname}', timezone = '${req.user.timezone}',
-    country = '${req.user.country}',  purpose = '${req.user.purpose}',
-    overallskill = '${req.user.overallskill}', timefrom = '${req.user.timefrom}', 
-    timeto = '${req.user.timeto}',  discord = '${req.user.discord}',
-    steam = '${req.user.steam}'
-  WHERE ID = '${req.user.id}'
-  RETURNING *
-  `;
-
-  console.log(bump);
-
   if (!req.user){
     res.locals.user = null;
     res.redirect('/users/login');
@@ -210,11 +197,11 @@ app.post('/profile', function(req, res){
 
     db.query(`
     UPDATE users SET 
-      nickname = '${req.user.nickname}', timezone = '${req.user.timezone}',
-      country = '${req.user.country}',  purpose = '${req.user.purpose}',
-      overallskill = '${req.user.overallskill}', timefrom = '${req.user.timefrom}', 
-      timeto = '${req.user.timeto}',  discord = '${req.user.discord}',
-      steam = '${req.user.steam}'
+      nickname = '${req.body.nickname}', timezone = '${req.body.timezone}',
+      country = '${req.body.country}',  purpose = '${req.body.purpose}',
+      overallskill = '${req.body.overallskill}', timefrom = '${req.body.timefrom}', 
+      timeto = '${req.body.timeto}',  discord = '${req.body.discord}',
+      steam = '${req.body.steam}'
     WHERE ID = '${req.user.id}'
     RETURNING *
     `, (err, result) => {
@@ -256,23 +243,13 @@ app.post('/searchStart', function(req, res){
     res.redirect('/users/login');
   } else {
     res.locals.user = req.user;
-
-    bump = `
-    UPDATE users SET
-      timefrom = '${req.user.timefrom}',
-      timeto = '${req.user.timeto}',
-      game = '${req.user.game}',
-      groupsize = '${req.user.groupsize}',
-      searching = '1'
-    WHERE ID = '${req.user.id}'
-    RETURNING *
-    `;
+    
     db.query(`
     UPDATE users SET
-      timefrom = '${req.user.timefrom}',
-      timeto = '${req.user.timeto}',
-      game = '${req.user.game}',
-      groupsize = '${req.user.groupsize}',
+      timefrom = '${req.body.timefrom}',
+      timeto = '${req.body.timeto}',
+      game = '${req.body.game}',
+      groupsize = '${req.body.groupsize}',
       searching = '1'
     WHERE ID = '${req.user.id}'
     RETURNING *
@@ -281,7 +258,6 @@ app.post('/searchStart', function(req, res){
         console.log(err);
       } else {
         if (result.rows[0]) {
-          console.log(bump);
           user=result.rows[0];
           res.render('search', {
             user: user
