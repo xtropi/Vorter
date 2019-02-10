@@ -1,0 +1,35 @@
+{
+  "name": "pern",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "babel-node server",
+    "builddev": "webpack --config ./webpack.config.js --mode development",
+    "buildprd": "webpack --config ./webpack.config.js --mode production",
+    "devserver": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "prdserver": "webpack-dev-server --config ./webpack.config.js --mode production"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/node": "^7.2.2",
+    "@babel/polyfill": "^7.2.5",
+    "express": "^4.16.4",
+    "pg": "^7.8.0",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "webpack": "^4.29.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.5",
+    "react-hot-loader": "^4.6.5",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.1.14"
+  }
+}
