@@ -35,15 +35,19 @@ class Time extends Component {
         return result.data
     }
     
-    componentDidMount = ()=>{
-    this.getData().then(result => this.setState({time: result.now}))
-        
+    componentDidMount = () => {
+        this.refreshTime()
+    }
+
+    refreshTime = () => {
+        this.getData().then(result => this.setState({time: result.now}))
     }
 
     render(){
         return(
             <div>
-            Server time: {this.state.time}           
+            Server time: {this.state.time} 
+            <button onClick={this.refreshTime}>Refresh</button>        
             </div>
         )
 

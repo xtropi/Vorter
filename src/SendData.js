@@ -16,11 +16,18 @@ class SendData extends Component {
         this.setState({...this.state, dataSended: event.target.value})
     }
 
+    onSubmit = (event) =>{
+        event.preventDefault()
+        this.sendData()
+      }
+
     render(){
         return(
             <div>
+            <form onSubmit={this.onSubmit}>
             <input type="text" value={this.state.dataSended} onChange={this.handleInput} />
-            <button onClick={this.sendData}>Send</button><br/>
+            <button onClick={this.sendData}>Send</button></form>
+            <br/>
             {this.state.dataRecieved.msg}<br/>
             {this.state.dataRecieved.data}<br/>
             </div>
