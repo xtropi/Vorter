@@ -47,7 +47,7 @@ class Time extends Component {
         return(
             <div>
             Server time: {this.state.time} 
-            <button onClick={this.refreshTime}>Refresh</button>        
+            <button className="btn btn-md btn-danger" onClick={this.refreshTime}>Refresh</button>        
             </div>
         )
 

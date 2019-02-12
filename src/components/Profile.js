@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
 
-class About extends Component {
+class Profile extends Component {
     render(){
         return(
             <div>
-            About
+            Profile
             <hr/>
             </div>
         )
@@ -12,4 +12,4 @@ class About extends Component {
     }
 }
 
-export default About
+export default Profile

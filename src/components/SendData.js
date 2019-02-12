@@ -26,8 +26,8 @@ class SendData extends Component {
         return(
             <div>
             <form onSubmit={this.onSubmit}>
-            <input type="text" value={this.state.dataSended} onChange={this.handleInput} />
-            <button>Send</button></form>
+            <input  type="text" value={this.state.dataSended} onChange={this.handleInput} />
+            <button className="btn btn-md btn-danger">Send</button></form>
             <br/>
             
             

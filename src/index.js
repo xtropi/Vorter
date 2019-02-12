@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App'
+import jQuery from 'jquery';
+import popper from 'popper.js';
+import 'bootstrap/dist/css/bootstrap.css'
+import Auth from './Auth'
 
 ReactDOM.render(
-  <App />,
+  <Auth />,
   document.getElementById('app')
 );
 
