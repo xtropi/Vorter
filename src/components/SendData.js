@@ -4,12 +4,13 @@ import axios from 'axios'
 class SendData extends Component {
     state = {
         dataSended: '',
-        dataRecieved: {}
+        dataRecieved: []
     }
 
     sendData = async () => {
         let result = await axios.post('http://localhost:80/postServerData', {data: this.state.dataSended})
-        this.setState({...this.state, dataRecieved: result.data})
+        let mergeDataRecieved = [...this.state.dataRecieved, result.data]
+        this.setState({...this.state, dataRecieved: mergeDataRecieved})
     }
 
     handleInput = () => {
@@ -26,10 +27,12 @@ class SendData extends Component {
             <div>
             <form onSubmit={this.onSubmit}>
             <input type="text" value={this.state.dataSended} onChange={this.handleInput} />
-            <button onClick={this.sendData}>Send</button></form>
+            <button>Send</button></form>
             <br/>
-            {this.state.dataRecieved.msg}<br/>
-            {this.state.dataRecieved.data}<br/>
+            
+            
+            {this.state.dataRecieved.map(element=>{return (<div>{element.msg} {element.data}<br/></div>)})}
+            
             </div>
         )
 
